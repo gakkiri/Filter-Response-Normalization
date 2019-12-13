@@ -26,11 +26,13 @@ class FRN(nn.Module):
             self.tau = parameter(torch.zeros(1, num_features, 1, 1), requires_grad=True)
 
     def forward(self, x):
-
-        nu2 = torch.mean(x.pow(2), (2, 3), keepdims=True)
-        x = x * torch.rsqrt(nu2 + torch.abs(self.eps))
+        # 1.
+        v2 = torch.mean(x.pow(2), (2, 3), keepdims=True)
+        # 2.
+        x = x * torch.rsqrt(v2 + torch.abs(self.eps))
+        # 3.
         x = self.gamma * x + self.beta
-
+        
         if self.tlu:
             x = torch.max(x, self.tau)
 
