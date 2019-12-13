@@ -26,9 +26,8 @@ class FRN(nn.Module):
             self.tau = parameter(torch.zeros(1, num_features, 1, 1), requires_grad=True)
 
     def forward(self, x):
-        # Compute the mean norm of activations per channel
+
         nu2 = torch.mean(x.pow(2), (2, 3), keepdims=True)
-        # Perform FRN
         x = x * torch.rsqrt(nu2 + torch.abs(self.eps))
         x = self.gamma * x + self.beta
 
